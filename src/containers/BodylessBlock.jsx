@@ -83,8 +83,10 @@ function BodylessBlock({ type, path, parameters = {}, querys = {}, responses }) 
   const textRef = React.useRef(null);
   const [resStatus, setResStatus] = React.useState();
   const [showTextdata, setShowTextdata] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
 
   async function handleMakeRequest( path, extraPath ) {
+    setLoading(true);
     setShowTextdata(true);
     try {
       let response;
@@ -108,6 +110,7 @@ function BodylessBlock({ type, path, parameters = {}, querys = {}, responses }) 
       const stringifiedError = JSON.stringify(error);
       textRef.current.value = stringifiedError;
     }
+    setLoading(false);
     prettyPrint();
   }
 
@@ -122,7 +125,7 @@ function BodylessBlock({ type, path, parameters = {}, querys = {}, responses }) 
   return (
     <div>
       {/* Block title */}
-      <section className={`w-full h-16 px-6 text-white ${blockTypes[type].titleColor} flex flex-row justify-between items-center  hover:cursor-pointer`} onClick={() => setIsCollapsed(prev => !prev)}>
+      <section className={`w-full h-16 px-6 text-white ${blockTypes[type].titleColor} flex flex-row justify-between items-center rounded-t-lg ${isCollapsed ? 'rounded-b-lg' : ''}   hover:cursor-pointer`} onClick={() => setIsCollapsed(prev => !prev)}>
         <div className='h-full flex flex-row items-center gap-8'>
           <p className='w-20 h-3/4 text-2xl font-bold bg-black bg-opacity-40 flex justify-center items-center rounded-lg'>{blockTypes[type].title}</p>
           <p className='text-xl drop-shadow-lg'>{path}</p>
@@ -134,7 +137,7 @@ function BodylessBlock({ type, path, parameters = {}, querys = {}, responses }) 
 
       {/* Request information */}
       <div className={`${isCollapsed && 'hidden'}`}>
-        <section className={`w-full h-auto text-white ${blockTypes[type].contentColor}`}>
+        <section className={`w-full h-auto text-white ${blockTypes[type].contentColor} ${showTextdata ? '' : 'rounded-b-lg'}`}>
           <div className='p-6 flex flex-col gap-4'>
 
             {/* Each parameter */}
@@ -222,12 +225,22 @@ function BodylessBlock({ type, path, parameters = {}, querys = {}, responses }) 
             </div>
 
             {/* Request button */}
-            <button onClick={() => handleMakeRequest(builtPath, extraPath)} className={`p-2 ${blockTypes[type].makeRequestColor} rounded-md transition-all duration-150   hover:bg-opacity-75 hover:shadow-md`}>Make request</button>
+            {!loading
+              ? <button onClick={() => handleMakeRequest(builtPath, extraPath)} className={`p-2 ${blockTypes[type].makeRequestColor} rounded-md transition-all duration-150   hover:bg-opacity-75 hover:shadow-md`}>Make request</button>
+              : <span className={`relative w-full h-10 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md ${blockTypes[type].makeRequestColor}`}>
+                  <span className='animate-spin'>
+                    <svg className='h-full text-white' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24'>
+                      <circle className='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' strokeWidth='4'></circle>
+                      <path className='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'></path>
+                    </svg>
+                  </span>
+                </span>
+            }
           </div>
         </section>
 
         {/* Response */}
-        <section className={`w-full h-auto px-6 ${blockTypes[type].contentColor}`}>
+        <section className={`w-full h-auto px-6 ${blockTypes[type].contentColor} rounded-b-lg`}>
           {showTextdata &&
             <div>
               <div className='mb-3 text-white flex flex-row justify-between items-center'>

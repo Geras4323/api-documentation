@@ -45,6 +45,9 @@ module.exports = {
       },
       screens: {
         'ssm': '510px',
+      },
+      animation: {
+        'spin-slow': 'spin 5s linear infinite'
       }
     },
   },

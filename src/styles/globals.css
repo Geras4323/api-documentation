@@ -1,3 +1,69 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html {
+  height: 100%;
+  background: linear-gradient(
+    to left,
+    rgb(13, 65, 65),
+    rgb(5, 5, 22)
+  );
+}
+
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 240px);
+  gap: 26px;
+  place-content: center;
+}
+
+.conic-gradient {
+  background: conic-gradient(
+    #000000,
+    #000000d5,
+    #00000073,
+    #0a0a0a00,
+    #00000073,
+    #000000d5,
+    #000000
+  )
+}
+
+.linear-gradient {
+  background: linear-gradient(
+    to bottom right,
+    rgb(43, 124, 124),
+    rgb(10, 10, 34)
+  );;
+}
+
+.glow {
+  /* font-size: 80px; */
+  color: #fff;
+  animation: glow 2s infinite alternate;
+}
+
+.flash {
+  /* font-size: 80px; */
+  color: #fff;
+  animation: flash 0.5s infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 12px rgb(132, 226, 255);
+  }
+  to {
+    text-shadow: 0 0 12px rgb(132, 226, 255);
+  }
+}
+
+@keyframes flash {
+  from {
+    text-shadow: 0 0 14px rgb(132, 226, 255);
+  }
+  to {
+    text-shadow: 0 0 14px rgb(29, 50, 56);
+  }
+}
