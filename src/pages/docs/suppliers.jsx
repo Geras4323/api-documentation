@@ -19,7 +19,7 @@ export default function Suppliers() {
         <div className='border flex flex-col rounded-xl'>
           <section className='glow h-16 px-6 rounded-t-xl bg-black bg-opacity-60 text-3xl flex items-center gap-4'>
             <Link href='/docs'>
-              <svg xmlns="http://www.w3.org/2000/svg" className='w-7 h-7   hover:scale-90 transition-all duration-100' viewBox="0 0 384 512"><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 278.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" className='w-7 h-7 fill-current text-white   hover:scale-90 transition-all duration-100' viewBox="0 0 384 512"><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 278.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"/></svg>
             </Link>
             <p>Suppliers</p>
           </section>
