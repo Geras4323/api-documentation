@@ -151,7 +151,7 @@ function BodyfullBlock({ type, path, parameters = {}, placeholder, responses }) 
                 <p className='p-2 text-xl rounded-md bg-black bg-opacity-40'>Parameters</p>
                 <form ref={paramsRef}>
                   {params.map((element, index) => (
-                    <div key={element} className='border-b border-separationBorder py-4'>
+                    <div key={element} className={`${(type === 'put' || type === 'patch') ? 'text-black' : 'text-white'} border-b border-separationBorder py-4`}>
                       <section className='flex flex-row'>
                         <div className='w-20 mr-4'>
                           <label htmlFor={element} className='font-bold'>{element}</label>
@@ -163,7 +163,7 @@ function BodyfullBlock({ type, path, parameters = {}, placeholder, responses }) 
                           type='text'
                           autoComplete='off'
                           placeholder={element}
-                          className='py-1 px-2 bg-slate-800 rounded-md focus:outline-none'
+                          className='py-1 px-2 bg-slate-800 text-white rounded-md w-full   focus:outline-none   ssm:w-48'
                         />
                       </section>
                       <section className='mt-4 flex flex-row'>

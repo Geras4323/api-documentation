@@ -158,7 +158,7 @@ function BodylessBlock({ type, path, parameters = {}, querys = {}, responses }) 
                           type='text'
                           autoComplete='off'
                           placeholder={element}
-                          className='py-1 px-2 bg-slate-800 rounded-md focus:outline-none'
+                          className='py-1 px-2 bg-slate-800 rounded-md w-full   focus:outline-none   ssm:w-48'
                         />
                       </section>
                       <section className='mt-4 flex flex-row'>
@@ -189,7 +189,7 @@ function BodylessBlock({ type, path, parameters = {}, querys = {}, responses }) 
                           type='text'
                           autoComplete='off'
                           placeholder={element}
-                          className='py-1 px-2 bg-slate-800 rounded-md focus:outline-none'
+                          className='py-1 px-2 bg-slate-800 rounded-md w-full   focus:outline-none   ssm:w-48'
                         />
                       </section>
                       <section className='mt-4 flex flex-row'>
