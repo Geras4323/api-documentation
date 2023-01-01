@@ -40,7 +40,7 @@ export default function Home() {
           />
           <DocsOption
             title='Products'
-            image='products.jpg'
+            image='products.png'
             path='products'
           />
           <DocsOption

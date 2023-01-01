@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 function DocsOption({ title, image, path }) {
   return (
-    <div className='
+    <div className='group
       w-[244px] h-[324px] bg-gray-200 relative flex justify-center items-center rounded-lg overflow-hidden
       hover:scale-105 transition-all duration-200
       '
@@ -25,7 +25,7 @@ function DocsOption({ title, image, path }) {
 
         <Link
           href={`/docs/${path}`}
-          className='w-full h-12 bg-black bg-opacity-30 flex justify-center items-center rounded-b-lg'
+          className='w-full h-12 bg-black bg-opacity-30 flex justify-center items-center rounded-b-lg   group-hover:bg-opacity-70   transition-all duration-100'
         >
           <p className='flash text-lg'>View endpoints</p>
         </Link>
