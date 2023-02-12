@@ -1,7 +1,14 @@
 import React from 'react';
 import Link from 'next/link';
 
-function DocsOption({ title, image, path }) {
+interface IOptions {
+  title: string,
+  image: string,
+  path: string,
+}
+
+
+function DocsOption({ title, image, path }: IOptions) {
   return (
     <div className='group
       w-[244px] h-[324px] bg-gray-200 relative flex justify-center items-center rounded-lg overflow-hidden

@@ -4,23 +4,32 @@ import { api } from '../config/axiosConnection';
 import { blockTypes } from '../config/blocksConfig';
 
 
-function BodyfullBlock({ type, path, parameters = {}, placeholder, responses }) {
-  const paramsRef = React.useRef(null);
-  const bodyRef = React.useRef(null); // body ref
-  const [params, setParams] = React.useState([]);   // params
-  const [paramTypes, setParamTypes] = React.useState([]); // datatypes of params
-  const [resps, setResps] = React.useState([]);     // responses
-  const [respTypes, setRespsTypes] = React.useState([]);  // descriptions of responses
-  const [defaultBody, setDefaultBody] = React.useState();
+interface IBodyfullBlock {
+  type: string,
+  path: string,
+  parameters?: { [key: string]: string },
+  placeholder: string,
+  responses: { [key: number]: string },
+}
 
-  const [builtPath, setBuiltPath] = React.useState(path);
 
-  const [isCollapsed, setIsCollapsed] = React.useState(true);
+function BodyfullBlock({ type, path, parameters = {}, placeholder, responses }: IBodyfullBlock) {
+  const paramsRef                     = React.useRef<HTMLFormElement>(null);
+  const bodyRef                       = React.useRef<HTMLTextAreaElement>(null); // body ref
+  const [params, setParams]           = React.useState<string[]>([]); // params
+  const [paramTypes, setParamTypes]   = React.useState<string[]>([]); // datatypes of params
+  const [resps, setResps]             = React.useState<string[]>([]); // responses
+  const [respTypes, setRespsTypes]    = React.useState<string[]>([]); // descriptions of responses
+  const [defaultBody, setDefaultBody] = React.useState<string>();
+
+  const [builtPath, setBuiltPath]     = React.useState<string>(path);
+
+  const [isCollapsed, setIsCollapsed] = React.useState<boolean>(true);
 
 
   React.useEffect(() => {
     const parsedPlaceholder = JSON.parse(placeholder)
-    const stringifiedPlaceholder = JSON.stringify(parsedPlaceholder, undefined, 4);
+    const stringifiedPlaceholder: string = JSON.stringify(parsedPlaceholder, undefined, 4);
     setDefaultBody(stringifiedPlaceholder);
 
     setParams(Object.keys(parameters));
@@ -31,8 +40,8 @@ function BodyfullBlock({ type, path, parameters = {}, placeholder, responses }) 
 
 
 
-  let originalPathParts = [];
-  let modifiedPathParts = [];
+  let originalPathParts: string[] = [];
+  let modifiedPathParts: string[] = [];
 
   function handleParamsChange() {
     const reg = /\//
@@ -42,7 +51,7 @@ function BodyfullBlock({ type, path, parameters = {}, placeholder, responses }) 
       modifiedPathParts.push(valor);
     }
     params.map(element => {
-      const elementValue = paramsRef.current[element].value;
+      const elementValue = paramsRef.current?.[element].value;
       if (elementValue.length > 0) {  // if modified, corrects the data array according to the position given by the first array
         let key = '{'
         key += element;
@@ -58,16 +67,16 @@ function BodyfullBlock({ type, path, parameters = {}, placeholder, responses }) 
   }
 
 
-  const textRef = React.useRef(null);
-  const [resStatus, setResStatus] = React.useState();
-  const [showTextdata, setShowTextdata] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
+  const textRef                         = React.useRef<HTMLTextAreaElement>(null);
+  const [resStatus, setResStatus]       = React.useState<number>();
+  const [showTextdata, setShowTextdata] = React.useState<boolean>(false);
+  const [loading, setLoading]           = React.useState<boolean>(false);
 
-  async function handleMakeRequest( path ) {
+  async function handleMakeRequest( path: string ) {
     setLoading(true);
     setShowTextdata(true);
     try {
-      const stringBody = bodyRef.current.value;
+      const stringBody = bodyRef.current!.value;
       const body = JSON.parse(stringBody);
       const config = {
         headers: {
@@ -87,31 +96,31 @@ function BodyfullBlock({ type, path, parameters = {}, placeholder, responses }) 
           response = await api.patch(path, body, config);
           break;
       }
-      const {data} = response;
-      const {status} = response;
+      const data = response?.data;
+      const status = response?.status;
       setResStatus(status);
       const stringifiedData = JSON.stringify(data)
-      textRef.current.value = stringifiedData;
+      textRef.current!.value = stringifiedData;
     }
-    catch (err) {
+    catch (err: any) {
       if (err.response.status === 400) { // wrong datatype
         const error = err.response.data.error;
         const stringifiedError = JSON.stringify(error);
-        textRef.current.value = stringifiedError;
+        textRef.current!.value = stringifiedError;
       }
       else if (err.response.status === 409) {
         const error = err.response.data.error;
         const stringifiedError = JSON.stringify(error);
-        textRef.current.value = stringifiedError;
+        textRef.current!.value = stringifiedError;
       }
       else if (err.response.status === 500 ) {  // id not found
         const stringifiedError = JSON.stringify({ statusCode: err.response.status, message: 'ID not found' });
-        textRef.current.value = stringifiedError;
+        textRef.current!.value = stringifiedError;
       }
       else {
         console.log(err)
         const stringifiedError = JSON.stringify({ statusCode: err.response.status, message: 'There has been an error' });
-        textRef.current.value = stringifiedError;
+        textRef.current!.value = stringifiedError;
       }
       setResStatus(err.response.status);
     }
@@ -120,10 +129,10 @@ function BodyfullBlock({ type, path, parameters = {}, placeholder, responses }) 
   }
 
   function prettyPrint() {
-    const ugly = textRef.current.value;
+    const ugly = textRef.current!.value;
     const obj = JSON.parse(ugly);
     const pretty = JSON.stringify(obj, undefined, 4);
-    textRef.current.value = pretty;
+    textRef.current!.value = pretty;
   }
 
 

@@ -1,7 +1,14 @@
 import React from 'react';
 import Link from 'next/link';
 
-function IndexLink({ link, title, description }) {
+interface IIndexLinks {
+  link: string,
+  title: string,
+  description: string,
+}
+
+
+function IndexLink({ link, title, description }: IIndexLinks): JSX.Element {
   return (
     <Link href={link} className='w-full h-full' target='_blank'>
       <div className='w-full h-full bg-black bg-opacity-40 rounded-xl border   hover:scale-105 transition-all duration-100'>

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { IndexLink } from '../containers/IndexLink';
 
 
-export default function Home() {
+export default function Home(): JSX.Element {
 
   return (
     <>

@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 import { DocsOption } from '../../containers/DocsOption';
 
-export default function Home() {
+export default function DocsHome(): JSX.Element {
 
   return (
     <>

@@ -1,4 +1,15 @@
-const blockTypes = {
+interface ITypes {
+  title: string,
+  titleColor: string,
+  contentColor: string,
+  makeRequestColor: string,
+}
+
+interface IBlockTypes {
+  [key: string]: ITypes
+}
+
+const blockTypes: IBlockTypes = {
   get: {
     title: 'Get',
     titleColor: 'bg-blue-800',

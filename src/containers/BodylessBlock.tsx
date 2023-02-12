@@ -4,22 +4,31 @@ import { api } from '../config/axiosConnection';
 import { blockTypes } from '../config/blocksConfig';
 
 
-function BodylessBlock({ type, path, parameters = {}, querys = {}, responses }) {
-  const paramsRef = React.useRef(null); // params form ref
-  const queryRef = React.useRef(null); // query form ref
-  const [params, setParams] = React.useState([]);   // params
-  const [paramTypes, setParamTypes] = React.useState([]); // datatypes of params
-  const [queryParams, setQueryParams] = React.useState([]);   // querys
-  const [queryTypes, setQueryTypes] = React.useState([]); // datatypes of querys
-  const [resps, setResps] = React.useState([]);     // responses
-  const [respTypes, setRespsTypes] = React.useState([]);  // descriptions of responses
+interface IBodylessBlock {
+  type: string,
+  path: string,
+  parameters?: { [key: string]: string },
+  querys?: { [key: string]: string },
+  responses: { [key: number]: string },
+}
 
-  const [builtPath, setBuiltPath] = React.useState(path);
 
-  const [isCollapsed, setIsCollapsed] = React.useState(true);
+function BodylessBlock({ type, path, parameters = {}, querys = {}, responses }: IBodylessBlock) {
+  const paramsRef                     = React.useRef<HTMLFormElement>(null); // params form ref
+  const queryRef                      = React.useRef<HTMLFormElement>(null); // query form ref
+  const [params, setParams]           = React.useState<string[]>([]); // params
+  const [paramTypes, setParamTypes]   = React.useState<string[]>([]); // datatypes of params
+  const [queryParams, setQueryParams] = React.useState<string[]>([]); // querys
+  const [queryTypes, setQueryTypes]   = React.useState<string[]>([]); // datatypes of querys
+  const [resps, setResps]             = React.useState<string[]>([]); // responses
+  const [respTypes, setRespsTypes]    = React.useState<string[]>([]); // descriptions of responses
 
-  const [extraPath, setExtraPath] = React.useState(''); // querys path
-  const querys_values = {};  // querys object
+  const [builtPath, setBuiltPath]     = React.useState<string>(path);
+
+  const [isCollapsed, setIsCollapsed] = React.useState<boolean>(true);
+
+  const [extraPath, setExtraPath]     = React.useState<string>(''); // querys path
+  const querys_values: { [key: string]: string } = {};  // querys object
 
 
   React.useEffect(() => {
@@ -35,11 +44,13 @@ function BodylessBlock({ type, path, parameters = {}, querys = {}, responses }) 
   function handleQueryChange() {
     // build an object with the original keys and the values entered
     queryParams.map(element => {
-      const elementValue = queryRef.current[element].value; // the input's value
-      if (elementValue.length > 0) {
-        querys_values[element] = elementValue;
-      } else {
-        querys_values[element] = '';
+      const elementValue = queryRef.current?.[element].value; // the input's value
+      if (queryRef.current !== null) {
+        if (elementValue.length > 0) {
+          querys_values[element] = elementValue;
+        } else {
+          querys_values[element] = '';
+        }
       }
     })
     // iterate that above object to build a path array
@@ -53,8 +64,8 @@ function BodylessBlock({ type, path, parameters = {}, querys = {}, responses }) 
   }
 
 
-  let originalPathParts = [];
-  let modifiedPathParts = [];
+  let originalPathParts: string[] = [];
+  let modifiedPathParts: string[] = [];
 
   function handleParamsChange() {
     const reg = /\//
@@ -68,7 +79,7 @@ function BodylessBlock({ type, path, parameters = {}, querys = {}, responses }) 
       key += param;
       key += '}';   // create the key to find its index
       const keyIndex = originalPathParts.indexOf(key);
-      const paramValue = paramsRef.current[param].value; // the input's value
+      const paramValue = paramsRef.current?.[param].value; // the input's value
       if (paramValue.length > 0) {  // if modified, corrects the data array according to the position given by the first array
         modifiedPathParts[keyIndex] = paramValue;
       } else {
@@ -80,12 +91,12 @@ function BodylessBlock({ type, path, parameters = {}, querys = {}, responses }) 
   }
 
 
-  const textRef = React.useRef(null);
-  const [resStatus, setResStatus] = React.useState();
-  const [showTextdata, setShowTextdata] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
+  const textRef                         = React.useRef<HTMLTextAreaElement>(null);
+  const [resStatus, setResStatus]       = React.useState<number>();
+  const [showTextdata, setShowTextdata] = React.useState<boolean>(false);
+  const [loading, setLoading]           = React.useState<boolean>(false);
 
-  async function handleMakeRequest( path, extraPath ) {
+  async function handleMakeRequest( path: string, extraPath: string ) {
     setLoading(true);
     setShowTextdata(true);
     try {
@@ -98,27 +109,29 @@ function BodylessBlock({ type, path, parameters = {}, querys = {}, responses }) 
           response = await api.delete(path)
           break;
       }
-      const {data} = response;
-      const {status} = response;
-      setResStatus(status);
+      const data = response?.data;
+      const status = response?.status;
+      if (status) {
+        setResStatus(status);
+      }
       const stringifiedData = JSON.stringify(data)
-      textRef.current.value = stringifiedData;
-    } catch (err) {
-      // console.log(err);
+      textRef.current!.value = stringifiedData;
+    } catch (err: any) {
       const error = err.response.data.error || err.response.data.message;
       setResStatus(err.response.status);
       const stringifiedError = JSON.stringify(error);
-      textRef.current.value = stringifiedError;
+      textRef.current!.value = stringifiedError;
     }
     setLoading(false);
     prettyPrint();
   }
 
   function prettyPrint() {
-    const ugly = textRef.current.value;
+    const ugly = textRef.current!.value;
     const obj = JSON.parse(ugly);
     const pretty = JSON.stringify(obj, undefined, 4);
-    textRef.current.value = pretty;
+    console.log(pretty);
+    textRef.current!.value = pretty;
   }
 
 
